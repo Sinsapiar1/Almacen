@@ -141,5 +141,34 @@
     <script src="js/ui-helpers.js"></script>
     <script src="js/login-animation.js"></script>
     <script src="js/dark-mode.js"></script>
+    <script>
+        // Verificar si venimos con el parámetro register=true
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldShowRegister = urlParams.get('register') === 'true';
+            
+            if (shouldShowRegister) {
+                // En móviles, mostrar directamente el formulario de registro
+                const container = document.querySelector('.auth-container');
+                if (container) {
+                    container.classList.add('active');
+                    console.log("Mostrando formulario de registro por parámetro URL");
+                }
+                
+                // En móviles, ocultar el formulario de login y mostrar el de registro
+                const loginForm = document.querySelector('.form-box.login');
+                const registerForm = document.querySelector('.form-box.register');
+                
+                if (loginForm && registerForm) {
+                    if (window.innerWidth <= 768) {
+                        loginForm.style.display = 'none';
+                        registerForm.style.display = 'block';
+                        registerForm.style.visibility = 'visible';
+                        registerForm.style.opacity = '1';
+                    }
+                }
+            }
+        });
+        </script>
 </body>
 </html>

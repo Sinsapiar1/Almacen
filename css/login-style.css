@@ -316,3 +316,36 @@ body.dark-mode .forgot-link a {
         margin: 20px 0;
     }
 }
+/* Agregar al final de tu CSS para solucionar el problema de registro en móviles */
+@media (max-width: 768px) {
+    /* Asegurarse de que ambos formularios funcionen en móviles */
+    .form-box.login,
+    .form-box.register {
+        width: 100%;
+        height: auto;
+        min-height: 400px;
+        padding: 20px;
+        position: relative;
+        transition: none; /* Deshabilitar transiciones que pueden causar problemas */
+    }
+    
+    /* Manejar visibilidad en lugar de transiciones complejas */
+    .form-box.register {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    /* Cuando está activo, cambiar entre formularios por visibilidad */
+    .auth-container.active .form-box.login {
+        display: none;
+    }
+    
+    .auth-container.active .form-box.register {
+        display: block;
+        visibility: visible;
+        opacity: 1;
+    }
+}

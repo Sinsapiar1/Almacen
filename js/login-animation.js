@@ -1,7 +1,30 @@
 // Versión simplificada y robusta de login-animation.js
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Script de animación de login cargado");
+    // Función para detectar dispositivos móviles y aplicar soluciones específicas
+function fixMobileRegistration() {
+    // Detectar si es móvil
+    const isMobile = window.innerWidth <= 768;
     
+    if (isMobile) {
+        console.log("Aplicando solución para registro en móviles");
+        
+        // Buscar el botón de registro
+        const registerBtn = document.querySelector('.register-btn');
+        
+        if (registerBtn) {
+            // Reemplazar el comportamiento del botón para móviles
+            registerBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // En lugar de animar, redirigir a una URL específica para registro
+                window.location.href = 'login.html?register=true';
+            });
+        }
+    }
+}
+
+// Ejecutar la función cuando cargue la página
+document.addEventListener('DOMContentLoaded', fixMobileRegistration);
     // Función para alternar entre formularios
     function setupFormToggle() {
         // Buscar elementos por varias estrategias para mayor compatibilidad
