@@ -349,3 +349,16 @@ body.dark-mode .forgot-link a {
         opacity: 1;
     }
 }
+/* Ocultar por defecto */
+.desktop-only, .mobile-only {
+    display: none;
+}
+
+/* Mostrar según la clase en el body */
+body.desktop-view .desktop-only {
+    display: block;
+}
+
+body.mobile-view .mobile-only {
+    display: block;
+}

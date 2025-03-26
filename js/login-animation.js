@@ -1,3 +1,22 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Detectar si es móvil
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    
+    // Aplicar clase al body según el dispositivo
+    if (isMobile) {
+        document.body.classList.add('mobile-view');
+    } else {
+        document.body.classList.add('desktop-view');
+    }
+    
+    // Inicializar la versión correcta
+    if (isMobile) {
+        initMobileView();
+    } else {
+        initDesktopView();
+    }
+});
+
 // Versión simplificada y robusta de login-animation.js
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Script de animación de login cargado");
