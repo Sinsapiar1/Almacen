@@ -199,3 +199,49 @@ body.dark-mode {
     color: #000 !important;
     font-weight: bold;
 }
+/* Estilos para el fondo 3D */
+#background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none; /* Para que no interfiera con clics */
+}
+
+/* Ajustes para que el contenido se vea bien sobre el fondo */
+.container, .card {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajuste para la barra de navegación */
+.navbar {
+    background: linear-gradient(135deg, rgba(26, 86, 219, 0.9), rgba(66, 153, 225, 0.9)) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Para mejorar legibilidad en tablas */
+.table {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+/* Para los modales */
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+.particles-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+}
