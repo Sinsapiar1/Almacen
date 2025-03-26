@@ -1,78 +1,103 @@
-// login-animation.js
+// Versión simplificada y robusta de login-animation.js
 document.addEventListener('DOMContentLoaded', function() {
-    const container = document.querySelector('.login-container');
-    const registerBtn = document.querySelector('.register-btn');
-    const loginBtn = document.querySelector('.login-btn');
-
-    // Check if we're in the login page
-    if (container && registerBtn && loginBtn) {
-        // Check URL parameters to see if we should show register form
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('form') === 'register') {
-            container.classList.add('active');
-        }
+    console.log("Script de animación de login cargado");
+    
+    // Función para alternar entre formularios
+    function setupFormToggle() {
+        // Buscar elementos por varias estrategias para mayor compatibilidad
+        const container = document.querySelector('.auth-container') || document.querySelector('.login-container');
         
-        // Set up click events for the toggle buttons
-        registerBtn.addEventListener('click', () => {
-            container.classList.add('active');
-        });
-
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove('active');
-        });
+        // Buscar todos los posibles botones de registro
+        const registerBtns = document.querySelectorAll('.register-btn, button[class*="register"], a[class*="register"]');
         
-        // Make sure forms submit correctly by fixing element IDs
-        const loginEmail = document.querySelector('.login #email');
-        const loginPassword = document.querySelector('.login #password');
-        const registerEmail = document.querySelector('.register #email');
-        const registerPassword = document.querySelector('.register #password');
+        // Buscar todos los posibles botones de login
+        const loginBtns = document.querySelectorAll('.login-btn, button[class*="login"], a[class*="login"]');
         
-        // Fix IDs to be unique
-        if (loginEmail && registerEmail) {
-            registerEmail.id = 'register-email';
-        }
+        console.log("Container encontrado:", !!container);
+        console.log("Botones de registro encontrados:", registerBtns.length);
+        console.log("Botones de login encontrados:", loginBtns.length);
         
-        if (loginPassword && registerPassword) {
-            registerPassword.id = 'register-password';
-        }
-        
-        // Update form submissions to work with the new IDs
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        
-        if (loginForm) {
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                
-                // Call the login function from auth.js
-                loginUser(email, password);
+        // Si encontramos el contenedor y al menos un botón
+        if (container) {
+            // Comprobar URL para activar registro si es necesario
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('form') === 'register' || urlParams.get('register') === 'true') {
+                container.classList.add('active');
+                console.log("Activando formulario de registro por parámetro URL");
+            }
+            
+            // Configurar todos los botones de registro encontrados
+            registerBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    container.classList.add('active');
+                    console.log("Botón de registro clickeado - activando");
+                });
             });
-        }
-        
-        if (registerForm) {
-            registerForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const fullName = document.getElementById('fullName').value;
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                
-                // Validate password match
-                if (password !== confirmPassword) {
-                    if (typeof showToast === 'function') {
-                        showToast('Las contraseñas no coinciden', 'warning');
+            
+            // Configurar todos los botones de login encontrados
+            loginBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    container.classList.remove('active');
+                    console.log("Botón de login clickeado - desactivando");
+                });
+            });
+            
+            // Si hay un formulario de login, asegurar su funcionamiento
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('email')?.value || '';
+                    const password = document.getElementById('password')?.value || '';
+                    
+                    console.log("Formulario de login enviado");
+                    if (typeof loginUser === 'function') {
+                        loginUser(email, password);
                     } else {
-                        alert('Las contraseñas no coinciden');
+                        console.error("Función loginUser no encontrada");
                     }
-                    return;
-                }
-                
-                // Call the register function from auth.js
-                registerUser(email, password, fullName);
-            });
+                });
+            }
+            
+            // Si hay un formulario de registro, asegurar su funcionamiento
+            const registerForm = document.getElementById('registerForm');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Usar selectores flexibles para encontrar los campos
+                    const fullName = document.getElementById('fullName')?.value || '';
+                    const email = document.querySelector('.register #email, #register-email')?.value || '';
+                    const password = document.querySelector('.register #password, #register-password')?.value || '';
+                    const confirmPassword = document.getElementById('confirmPassword')?.value || '';
+                    
+                    console.log("Formulario de registro enviado");
+                    
+                    // Validar coincidencia de contraseñas
+                    if (password !== confirmPassword) {
+                        if (typeof showToast === 'function') {
+                            showToast('Las contraseñas no coinciden', 'warning');
+                        } else {
+                            alert('Las contraseñas no coinciden');
+                        }
+                        return;
+                    }
+                    
+                    if (typeof registerUser === 'function') {
+                        registerUser(email, password, fullName);
+                    } else {
+                        console.error("Función registerUser no encontrada");
+                    }
+                });
+            }
         }
     }
+    
+    // Ejecutar la configuración
+    setupFormToggle();
+    
+    // Por si el DOM cambia, intentar nuevamente después de un breve retraso
+    setTimeout(setupFormToggle, 500);
 });
